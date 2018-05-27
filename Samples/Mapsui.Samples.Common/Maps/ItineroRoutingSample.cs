@@ -6,8 +6,7 @@ using Mapsui.Projection;
 using Mapsui.Providers;
 using Mapsui.Styles;
 using Mapsui.Utilities;
-using Reminiscence;
-using Reminiscence.Collections;
+using System.Collections.Generic;
 
 namespace Mapsui.Samples.Common.Maps
 {
@@ -26,27 +25,27 @@ namespace Mapsui.Samples.Common.Maps
             return map;
         }
 
-        //private ILayer LayerRouteW(Route route)
-        //{
-            //List<> p = new System.Collections.Generic.List<>();
-            //foreach (Coordinate coordinate in route.Shape)
-            //{
-            //    var spherical = SphericalMercator.FromLonLat(coordinate.Longitude, coordinate.Latitude);
-            //    p.Add(new Point(spherical.X, spherical.Y));
-            //}
-            //LineString ls = new LineString(p);
-            //Feature f = new Feature
-            //{
-            //    Geometry = ls,
-            //    ["Name"] = "Line 1",
-            //    Styles = new List { new VectorStyle { Line = new Pen(Color.Blue, 6) } }
-            //};
-            //return new MemoryLayer
-            //{
-            //    Name = "Route",
-            //    DataSource = new MemoryProvider(f),
-            //    Style = null
-            //};
-        //}
+        private ILayer LayerRouteW(Route route)
+        {
+            var p = new System.Collections.Generic.List<Point>();
+            foreach (Coordinate coordinate in route.Shape)
+            {
+                var spherical = SphericalMercator.FromLonLat(coordinate.Longitude, coordinate.Latitude);
+                p.Add(new Point(spherical.X, spherical.Y));
+            }
+            var ls = new LineString(p);
+            var f = new Feature
+            {
+                Geometry = ls,
+                ["Name"] = "Line 1",
+                Styles = new List<IStyle> { new VectorStyle { Line = new Pen(Color.Blue, 6) } }
+            };
+            return new MemoryLayer
+            {
+                Name = "Route",
+                DataSource = new MemoryProvider(f),
+                Style = null
+            };
+        }
     }
 }
